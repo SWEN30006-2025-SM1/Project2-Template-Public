@@ -832,10 +832,13 @@ public class Pinochle extends CardGame {
         Suit existingSuit = (Suit) existingCard.getSuit();
         Rank existingRank = (Rank) existingCard.getRank();
 
-        if (playingSuit.getSuitShortHand().equals(existingSuit.getSuitShortHand()) && playingRank.getRankCardValue() > existingRank.getRankCardValue()) {
+        // Same Suit, Higher Rank, then valid
+        if (playingSuit.getSuitShortHand().equals(existingSuit.getSuitShortHand()) &&
+                playingRank.getRankCardValue() > existingRank.getRankCardValue()) {
             return true;
         }
 
+        // If the chosen is not the same suit, higher rank and there is one, then not valid
         Card higherCard = getHigherCardFromList(existingCard, playerCards);
         if (higherCard != null) {
             return false;
@@ -843,19 +846,25 @@ public class Pinochle extends CardGame {
 
         boolean isExistingTrump = existingSuit.getSuitShortHand().equals(trumpSuit);
         boolean isPlayingTrump = playingSuit.getSuitShortHand().equals(trumpSuit);
-
-        if (isExistingTrump && isPlayingTrump) {
-            return false;
+        // If the current is trump, then there is already no trump card with higher rank.
+        // Otherwise, the above if should return false.
+        if (isExistingTrump) {
+            return true;
         }
 
+        // If the current is not trump card, then playing trump card is valid
         if (isPlayingTrump) {
             return true;
         }
 
+        // If the current is not trump card, and we have a trump card,
+        // but not having a same suit, higher rank card, then we have to play trump card
         Card trumpCard = getTrumpCard(playerCards);
         if (trumpCard != null) {
             return false;
         }
+
+        // If we dont have a trump card, any card is valid
         return true;
     }
 

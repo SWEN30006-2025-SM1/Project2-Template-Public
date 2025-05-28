@@ -61,7 +61,7 @@ public class TestGame {
     }
 
     public String findLine(String text, String needle) {
-        try (Stream<String> lines = text.lines()) {// Java 11+ ✨
+        try (Stream<String> lines = text.lines()) {// Java 11+
             return lines.filter(line -> line.contains(needle))    // keep matching lines
                     .toList().stream().findAny().orElse(null);
         }
